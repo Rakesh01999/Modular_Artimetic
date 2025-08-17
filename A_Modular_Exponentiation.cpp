@@ -1,17 +1,15 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
-    int n;
-    unsigned int m;
+    long long n, m;
     cin >> n >> m;
 
     if (n >= 31) {
-        // 2^31 > 10^9, so m < 2^n
-        cout << m << endl;
+        cout << m << "\n";  // 2^n > m, so remainder = m
     } else {
-        unsigned int power = 1U << n; // 2^n using bit shift
-        cout << m % power << endl;
+        long long modVal = 1LL << n;  // compute 2^n
+        cout << m % modVal << "\n";
     }
 
     return 0;

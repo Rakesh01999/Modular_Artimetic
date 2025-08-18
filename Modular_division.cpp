@@ -3,18 +3,22 @@ using namespace std;
 using ll = long long;
 
 // Fast exponentiation (a^b mod m)
-ll mod_pow(ll base, ll exp, ll mod) {
+ll mod_pow(ll base, ll exp, ll mod)
+{
     ll result = 1;
-    base %= mod;
-    while (exp > 0) {
-        if (exp & 1) result = (result * base) % mod;
+    base = base % mod;
+    while (exp > 0)
+    {
+        if (exp & 1)
+            result = (result * base) % mod;
         base = (base * base) % mod;
         exp >>= 1;
     }
     return result;
 }
 
-int main() {
+int main()
+{
     ll a, b, n;
     cin >> a >> b >> n;
 
@@ -26,4 +30,3 @@ int main() {
     cout << ans << "\n";
     return 0;
 }
-

@@ -1,23 +1,26 @@
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
-#define ll long long
-#define mod 109546051211
 
-int main(){
-    ll n;cin>>n;
-    vector<ll> v(n);
-    if (n==1)
-    {
-        cout<<1<<endl;
-        return 0;
+const long long MOD = 109546051211;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+
+    long long result = 1;
+    long long fact = 1;
+
+    for (int i = 1; i <= n; ++i) {
+        fact = (fact * i) % MOD;       // Compute i! modulo MOD
+        result = (result * fact) % MOD; // Multiply into the product
+
+        // Early termination: once factorial becomes 0 mod MOD, all future products are 0
+        if (fact == 0) break;
     }
-    
-    ll fact = 1, ans = 1;
-    for (ll i = 1; i <= n; i++)
-    {
-        fact = (fact * i) % mod;
-        ans= (ans * fact) % mod;
-    }
-    cout<< ans  <<endl;
+
+    cout << result << '\n';
     return 0;
 }

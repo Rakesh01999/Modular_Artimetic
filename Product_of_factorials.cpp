@@ -1,26 +1,31 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-
-const long long MOD = 109546051211;
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    const unsigned long long MOD = 109546051211ULL;
     int n;
     cin >> n;
 
-    long long result = 1;
-    long long fact = 1;
-
+    unsigned long long fact = 1, ans = 1;
     for (int i = 1; i <= n; ++i) {
-        fact = (fact * i) % MOD;       // Compute i! modulo MOD
-        result = (result * fact) % MOD; // Multiply into the product
-
-        // Early termination: once factorial becomes 0 mod MOD, all future products are 0
-        if (fact == 0) break;
+        fact = ((__uint128_t)fact * i) % MOD;
+        ans  = ((__uint128_t)ans  * fact) % MOD;
     }
 
-    cout << result << '\n';
+    // Convert __uint128_t to string manually
+    string output;
+    __uint128_t final = ans;
+    if (final == 0) output = "0";
+    else {
+        while (final > 0) {
+            output = char('0' + final % 10) + output;
+            final /= 10;
+        }
+    }
+
+    cout << output << '\n';
     return 0;
 }

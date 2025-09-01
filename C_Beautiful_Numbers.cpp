@@ -1,35 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int MOD = 1e9 + 7;
-const int MAXN = 1e6 + 5;
 
-long long fact[MAXN], invFact[MAXN];
-
-// Fast exponentiation modulo MOD
-long long modpow(long long a, long long b) {
+long long modpow(long long base, long long exp, long long mod) {
     long long res = 1;
-    while (b) {
-        if (b & 1) res = res * a % MOD;
-        a = a * a % MOD;
-        b >>= 1;
+    while (exp > 0) {
+        if (exp & 1) res = (res * base) % mod;
+        base = (base * base) % mod;
+        exp >>= 1;
     }
     return res;
 }
 
-// Check if a number only contains digits a or b
-bool isGood(int x, int a, int b) {
+// Precompute factorials and inverses
+vector<long long> fact, invFact;
+void initFactorials(int n) {
+    fact.resize(n+1);
+    invFact.resize(n+1);
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++) fact[i] = (fact[i-1] * i) % MOD;
+    invFact[n] = modpow(fact[n], MOD-2, MOD);
+    for (int i = n-1; i >= 0; i--) invFact[i] = (invFact[i+1] * (i+1)) % MOD;
+}
+
+long long nCr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return fact[n] * invFact[r] % MOD * invFact[n-r] % MOD;
+}
+
+// Check if number is "good"
+bool isGood(long long x, int a, int b) {
     while (x > 0) {
         int d = x % 10;
         if (d != a && d != b) return false;
         x /= 10;
     }
     return true;
-}
-
-// Compute nCk modulo MOD
-long long C(int n, int k) {
-    if (k < 0 || k > n) return 0;
-    return fact[n] * invFact[k] % MOD * invFact[n - k] % MOD;
 }
 
 int main() {
@@ -39,21 +45,16 @@ int main() {
     int a, b, n;
     cin >> a >> b >> n;
 
-    // Precompute factorials and inverses
-    fact[0] = 1;
-    for (int i = 1; i <= n; ++i)
-        fact[i] = fact[i - 1] * i % MOD;
-
-    invFact[n] = modpow(fact[n], MOD - 2);
-    for (int i = n - 1; i >= 0; --i)
-        invFact[i] = invFact[i + 1] * (i + 1) % MOD;
+    initFactorials(n);
 
     long long ans = 0;
-    for (int k = 0; k <= n; ++k) {
-        int sum = k * a + (n - k) * b;
+    for (int k = 0; k <= n; k++) {
+        long long sum = 1LL * k * a + 1LL * (n - k) * b;
         if (isGood(sum, a, b)) {
-            ans = (ans + C(n, k)) % MOD;
+            ans = (ans + nCr(n, k)) % MOD;
         }
     }
-    cout << ans << "\n";
+
+    cout << ans % MOD << "\n";
+    return 0;
 }
